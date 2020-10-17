@@ -6,7 +6,7 @@ RSpec.describe Merchant, type: :model do
   end
 
   describe "relationships" do
-    # it { should belong_to :merchant}
     it { should have_many :items}
+    it { should have_many :invoices}
   end
 end
