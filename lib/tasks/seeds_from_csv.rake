@@ -40,8 +40,8 @@ namespace :csv_import do
       binding.pry
       Item.create!( id: line[:id],
                     name: line[:name],
-                    description: libe[:description],
-                    price: (line[:unit_price].to_f / 100).round(2),
+                    description: line[:description],
+                    unit_price: (line[:unit_price].to_f / 100).round(2),
                     merchant: line[:merchant_id],
                     created_at: line[:created_at],
                     updated_at: line[:updated_at])
@@ -71,7 +71,7 @@ namespace :csv_import do
                             invoice: line[:invoice_id],
                             card: line[:credit_card_number],
                             card_exp: line[:credit_card_expiration_date],
-                            status: line[:result],
+                            result: line[:result],
                             created_at: line[:created_at],
                             updated_at: line[:updated_at])
     end
