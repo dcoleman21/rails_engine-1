@@ -37,10 +37,11 @@ namespace :csv_import do
     end
 
     read_csv("items").each do |line|
+      binding.pry
       Item.create!( id: line[:id],
                     name: line[:name],
                     description: libe[:description],
-                    price: line[:unit_price],
+                    price: (line[:unit_price].to_f / 100).round(2),
                     merchant: line[:merchant_id],
                     created_at: line[:created_at],
                     updated_at: line[:updated_at])
@@ -91,7 +92,7 @@ namespace :csv_import do
                             item: line[:item_id],
                             invoice: line[:invoice_id],
                             quantity: line[:quantity],
-                            unit_price: line[:unit_price],
+                            unit_price: (line[:unit_price].to_f / 100).round(2),
                             created_at: line[:created_at],
                             updated_at: line[:updated_at])
     end
