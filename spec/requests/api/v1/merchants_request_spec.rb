@@ -58,14 +58,23 @@ describe "Merchants API" do
   it "can create a new merchant" do
     merchant_params = {
       name: "name",
+      created_at: "create",
+      updated_at: "update"
     }
 
-    headers = {"CONTENT_TYPE" => "application/json"}
-
-    post "/api/v1/merchants", headers: headers, params: JSON.generate(merchant: merchant_params)
+    post "/api/v1/merchants", params: merchant_params
     created_merchant = Merchant.last
 
     expect(response).to be_successful
     expect(created_merchant.name).to eq(merchant_params[:name])
+  end
+
+  it "can destroy a merchant" do
+    merchant = create(:merchant)
+
+    expect{ delete "/api/v1/merchants/#{merchant.id}" }.to change(Merchant, :count).by(-1)
+
+    expect(response).to be_successful
+    expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
 end
