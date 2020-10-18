@@ -81,11 +81,11 @@ namespace :csv_import do
     end
     puts('InvoiceItem: File imported')
 
+
     read_csv('transactions').each do |line|
       Transaction.create!(id: line[:id],
                           invoice: Invoice.find(line[:invoice_id].to_i),
-                          card: line[:credit_card_number],
-                          card_exp: line[:credit_card_expiration_date],
+                          card: line[:credit_card_number].to_i,
                           result: line[:result],
                           created_at: line[:created_at],
                           updated_at: line[:updated_at])
