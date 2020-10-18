@@ -14,19 +14,19 @@ describe "Merchants API" do
 
     merchants[:data].each do |merchant|
       expect(merchant).to have_key(:id)
-      expect(merchant[:id]).to be_an(String)
+      expect(merchant[:id]).to be_a(String)
 
       expect(merchant).to have_key(:type)
       expect(merchant[:type]).to eq("merchant")
 
       expect(merchant[:attributes]).to have_key(:name)
-      expect(merchant[:attributes][:name]).to be_an(String)
+      expect(merchant[:attributes][:name]).to be_a(String)
 
       expect(merchant[:attributes]).to have_key(:created_at)
-      expect(merchant[:attributes][:created_at]).to be_an(String)
+      expect(merchant[:attributes][:created_at]).to be_a(String)
 
       expect(merchant[:attributes]).to have_key(:updated_at)
-      expect(merchant[:attributes][:updated_at]).to be_an(String)
+      expect(merchant[:attributes][:updated_at]).to be_a(String)
     end
   end
 end
