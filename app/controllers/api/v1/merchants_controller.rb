@@ -8,6 +8,7 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def create
+    ActiveRecord::Base.connection.reset_pk_sequence!('merchants')
     new_merchant = Merchant.new(merchant_params)
     render json: MerchantSerializer.new(new_merchant) if new_merchant.save
   end
