@@ -1,3 +1,10 @@
+# Spec Harness ReST endpoints Merchants can get all merchants
+#      Failure/Error: expect(json[:data].length).to eq(100)
+#
+#      TypeError:
+#        no implicit conversion of Symbol into Integer
+#      # ./spec/features/harness_spec.rb:134:in `block (4 levels) in <top (required)>'
+
 require 'rails_helper'
 
 describe "Merchants API" do
