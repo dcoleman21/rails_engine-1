@@ -54,7 +54,7 @@ namespace :csv_import do
                    name: line[:name],
                    description: line[:description],
                    unit_price: (line[:unit_price].to_f / 100).round(2),
-                   merchant: line[:merchant_id].to_i,
+                   merchant: Merchant.find(line[:merchant_id].to_i),
                    created_at: line[:created_at],
                    updated_at: line[:updated_at])
     end
@@ -62,8 +62,8 @@ namespace :csv_import do
 
     read_csv('invoices').each do |line|
       Invoice.create!(id: line[:id],
-                      customer: line[:customer_id].to_i,
-                      merchant: line[:merchant_id].to_i,
+                      customer: Customer.find(line[:customer_id].to_i),
+                      merchant: Merchant.find(line[:merchant_id].to_i),
                       status: line[:status],
                       created_at: line[:created_at],
                       updated_at: line[:updated_at])
@@ -72,8 +72,8 @@ namespace :csv_import do
 
     read_csv('invoice_items').each do |line|
       InvoiceItem.create!(id: line[:id],
-                          item: line[:item_id].to_i,
-                          invoice: line[:invoice_id].to_i,
+                          item: Item.find(line[:item_id].to_i),
+                          invoice: Invoice.find(line[:invoice_id].to_i),
                           quantity: line[:quantity],
                           unit_price: (line[:unit_price].to_f / 100).round(2),
                           created_at: line[:created_at],
@@ -83,7 +83,7 @@ namespace :csv_import do
 
     read_csv('transactions').each do |line|
       Transaction.create!(id: line[:id],
-                          invoice: line[:invoice_id].to_i,
+                          invoice: Invoice.find(line[:invoice_id].to_i),
                           card: line[:credit_card_number],
                           card_exp: line[:credit_card_expiration_date],
                           result: line[:result],
