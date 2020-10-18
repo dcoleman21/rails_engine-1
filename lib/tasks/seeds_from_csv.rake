@@ -17,39 +17,22 @@ require 'csv'
 namespace :csv_import do
   desc 'Seed csv data from db/csv_files to database table'
 
-  task cleardata: :environment do
+  task seedCSV: :environment do
     Rake::Task['db:drop'].execute
     Rake::Task['db:create'].execute
     Rake::Task['db:migrate'].execute
     puts('Records destroyed')
-  end
 
-  task resetkey: :environment do
     ActiveRecord::Base.connection.tables.each do |t|
       ActiveRecord::Base.connection.reset_pk_sequence!(t)
     end
-  end
 
-  task seedCSV: :environment do
     def read_csv(resource)
       file = "db/csv_files/#{resource}.csv"
       CSV.read(file, headers: true, header_converters: :symbol)
     end
 
-    read_csv('items').each do |line|
-      binding.pry
-      Item.create!(id: line[:id],
-                   name: line[:name],
-                   description: line[:description],
-                   unit_price: (line[:unit_price].to_f / 100).round(2),
-                   merchant: line[:merchant_id],
-                   created_at: line[:created_at],
-                   updated_at: line[:updated_at])
-    end
-    puts('Item: File imported')
-
     read_csv('merchants').each do |line|
-      binding.pry
       Merchant.create!(id: line[:id],
                        name: line[:name],
                        created_at: line[:created_at],
@@ -66,21 +49,21 @@ namespace :csv_import do
     end
     puts('Customer: File imported')
 
-    read_csv('transactions').each do |line|
-      Transaction.create!(id: line[:id],
-                          invoice: line[:invoice_id],
-                          card: line[:credit_card_number],
-                          card_exp: line[:credit_card_expiration_date],
-                          result: line[:result],
-                          created_at: line[:created_at],
-                          updated_at: line[:updated_at])
+    read_csv('items').each do |line|
+      Item.create!(id: line[:id],
+                   name: line[:name],
+                   description: line[:description],
+                   unit_price: (line[:unit_price].to_f / 100).round(2),
+                   merchant: line[:merchant_id].to_i,
+                   created_at: line[:created_at],
+                   updated_at: line[:updated_at])
     end
-    puts('Transaction: File imported')
+    puts('Item: File imported')
 
     read_csv('invoices').each do |line|
       Invoice.create!(id: line[:id],
-                      customer: line[:customer_id],
-                      merchant: line[:merchant_id],
+                      customer: line[:customer_id].to_i,
+                      merchant: line[:merchant_id].to_i,
                       status: line[:status],
                       created_at: line[:created_at],
                       updated_at: line[:updated_at])
@@ -89,13 +72,24 @@ namespace :csv_import do
 
     read_csv('invoice_items').each do |line|
       InvoiceItem.create!(id: line[:id],
-                          item: line[:item_id],
-                          invoice: line[:invoice_id],
+                          item: line[:item_id].to_i,
+                          invoice: line[:invoice_id].to_i,
                           quantity: line[:quantity],
                           unit_price: (line[:unit_price].to_f / 100).round(2),
                           created_at: line[:created_at],
                           updated_at: line[:updated_at])
     end
     puts('InvoiceItem: File imported')
+
+    read_csv('transactions').each do |line|
+      Transaction.create!(id: line[:id],
+                          invoice: line[:invoice_id].to_i,
+                          card: line[:credit_card_number],
+                          card_exp: line[:credit_card_expiration_date],
+                          result: line[:result],
+                          created_at: line[:created_at],
+                          updated_at: line[:updated_at])
+    end
+    puts('Transaction: File imported')
   end
 end
