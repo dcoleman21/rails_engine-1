@@ -86,9 +86,9 @@ describe "Merchants API" do
     merchant_params = { name: "NEW MERCHANT NAME" }
 
     patch "/api/v1/merchants/#{id}", params: merchant_params
-    merchant = Merchant.find_by(id: id)
-
     expect(response).to be_successful
+
+    merchant = Merchant.find_by(id: id)
     expect(merchant.name).to_not eq(previous_name)
     expect(merchant.name).to eq(merchant_params[:name])
   end
