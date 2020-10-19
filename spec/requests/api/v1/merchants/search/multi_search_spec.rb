@@ -52,7 +52,7 @@ describe "it can search by keywords for a multiple merchants:" do
 
   scenario "searches using updated_at" do
     attribute = "updated_at"
-    create(:merchant, 3)
+    create_list(:merchant, 3)
     value = "19"
 
     get "/api/v1/merchants/find_all?#{attribute}=#{value}"
