@@ -36,7 +36,7 @@ describe "it can search by keywords for a multiple items:" do
     items.each do |item|
       expect(item[:id].to_i).to eq(item_1.id).or(eq item_2.id).or(eq item_3.id)
       expect(item[:id].to_i).to_not eq(item_4.id)
-      expect(item[:attributes][:name].downcase).to include(value.downcase)
+      expect(item[:attributes][:description].downcase).to include(value.downcase)
     end
   end
 
@@ -51,7 +51,7 @@ describe "it can search by keywords for a multiple items:" do
     expect(response).to be_successful
 
     items = JSON.parse(response.body, symbolize_names: true)[:data]
-    expect(items.count).to eq(3)
+    expect(items.count).to eq(2)
     items.each do |item|
       expect(item[:id].to_i).to eq(item_1.id).or(eq item_2.id)
       expect(item[:id].to_i).to_not eq(item_3.id)
