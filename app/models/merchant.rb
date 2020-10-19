@@ -5,6 +5,10 @@ class Merchant < ApplicationRecord
   has_many :invoices
 
   def self.single_finder(attribute, query)
-    Merchant.where("LOWER(#{attribute}) LIKE ?", "%#{query.downcase}%").first
+    if attribute == "created_at" || attribute == "updated_at"
+      Merchant.where("to_char(#{attribute},'yyyy-mon-dd-HH-MI-SS') ILIKE ?", "%#{query}%").first
+    else
+      Merchant.where("LOWER(#{attribute}) LIKE ?", "%#{query.downcase}%").first
+    end
   end
 end
