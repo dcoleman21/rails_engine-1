@@ -21,14 +21,20 @@ describe "it can search by keywords for a single merchant:" do
 
     merchant = JSON.parse(response.body, symbolize_names: true)[:data]
     expect(merchant[:id].to_i).to eq(merchant_1.id)
+    expect(merchant[:id].to_i).to_not eq(merchant_2.id)
+    expect(merchant[:id].to_i).to_not eq(merchant_3.id)
 
     get "/api/v1/merchants/find?#{attribute}=#{value_2}"
     expect(response).to be_successful
 
     merchant = JSON.parse(response.body, symbolize_names: true)[:data]
     expect(merchant[:id].to_i).to eq(merchant_4.id)
+    expect(merchant[:id].to_i).to_not eq(merchant_5.id)
+    expect(merchant[:id].to_i).to_not eq(merchant_6.id)
   end
 
-  scenario "searches using created_at"
+  scenario "searches using created_at" do
+
+  end
   scenario "searches using updated_at"
 end
