@@ -13,21 +13,20 @@ describe "it can search by keywords for a single merchant:" do
     merchant_6 = create(:merchant, name: "Wind Worms")
 
     attribute = "name"
-    value_1 = "ocarina of time"
-    value_1 = "WIND WAKER"
+    value_1 = "ocarina"
+    value_2 = "WIND"
 
     get "/api/v1/merchants/find?#{attribute}=#{value_1}"
     expect(response).to be_successful
 
     merchant = JSON.parse(response.body, symbolize_names: true)[:data]
-    expect(merchant.name).to eq(merchant_1.id)
+    expect(merchant[:id].to_i).to eq(merchant_1.id)
 
     get "/api/v1/merchants/find?#{attribute}=#{value_2}"
     expect(response).to be_successful
 
     merchant = JSON.parse(response.body, symbolize_names: true)[:data]
-    expect(merchant.name).to eq(merchant_3.id)
-    binding.pry
+    expect(merchant[:id].to_i).to eq(merchant_4.id)
   end
 
   scenario "searches using created_at"
