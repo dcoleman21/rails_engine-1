@@ -31,7 +31,7 @@ describe "it can search by keywords for a single item:" do
     expect(returned_item[:attributes][:description].downcase).to include(value.downcase)
   end
 
-  scenario "searches for unit price matches that are case insensitive" do
+  scenario "searches for unit price matches that are partial" do
     attribute = "unit_price"
     value = 99
     item_1 = create(:item, unit_price: 99.13)
