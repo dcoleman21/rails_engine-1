@@ -46,7 +46,7 @@ describe "it can search by keywords for a single merchant:" do
     expect(merchant[:id].to_i).to eq(merchant_1.id)
     expect(merchant[:id].to_i).to_not eq(merchant_2.id)
     expect(merchant[:id].to_i).to_not eq(merchant_3.id)
-    expect(merchant[:attributes][:name].downcase).to include(value_1.downcase)
+    expect(merchant[:attributes][:name].downcase).to include(value.downcase)
   end
 
   scenario "searches using created_at" do
