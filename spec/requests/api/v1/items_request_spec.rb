@@ -63,4 +63,36 @@ describe "Items API" do
     expect(item[:attributes]).to have_key(:updated_at)
     expect(item[:attributes][:updated_at]).to be_a(String)
   end
+
+  it "can create a new item" do
+    merchant = create(:merchant)
+    item_params = {
+      name: "name",
+      description: "This is a chunk of information that is supposed to be 256 characters or longer since that is the limit of a String data type in Active Record and this particular record allows for a Text data type which allows for up to 30,000 characters saved. This allows our CSV doc to send and save longer descriptions.",
+      unit_price: 300.98,
+      merchant_id: merchant.id,
+      created_at: "create",
+      updated_at: "update"
+    }
+
+    post "/api/v1/items", params: item_params
+    created_item = Item.last
+
+    expect(response).to be_successful
+    expect(created_item.name).to eq(item_params[:name])
+    expect(created_item.description).to eq(item_params[:description])
+    expect(created_item.unit_price).to eq(item_params[:unit_price])
+    expect(created_item.merchant_id).to eq(merchant.id)
+  end
+
+  it "can destroy a item" do
+    item = create(:item)
+
+    expect{ delete "/api/v1/items/#{item.id}" }.to change(Item, :count).by(-1)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(204)
+    expect(response.body).to be_empty
+    expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
 end

@@ -54,4 +54,29 @@ describe "Merchants API" do
     expect(merchant[:attributes]).to have_key(:updated_at)
     expect(merchant[:attributes][:updated_at]).to be_a(String)
   end
+
+  it "can create a new merchant" do
+    merchant_params = {
+      name: "name",
+      created_at: "create",
+      updated_at: "update"
+    }
+
+    post "/api/v1/merchants", params: merchant_params
+    created_merchant = Merchant.last
+
+    expect(response).to be_successful
+    expect(created_merchant.name).to eq(merchant_params[:name])
+  end
+
+  it "can destroy a merchant" do
+    merchant = create(:merchant)
+
+    expect{ delete "/api/v1/merchants/#{merchant.id}" }.to change(Merchant, :count).by(-1)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(204)
+    expect(response.body).to be_empty
+    expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
 end
