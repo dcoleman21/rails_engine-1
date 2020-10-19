@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "it can search by keywords for a single merchant:" do
-  scenario "searches for partial matches that are case insensitive" do
+  scenario "searches for matches that are case insensitive" do
     attribute = "name"
     value_1 = "ocarina"
     merchant_1 = create(:merchant, name: "The Ocarina of Time")
@@ -30,6 +30,23 @@ describe "it can search by keywords for a single merchant:" do
     expect(merchant[:id].to_i).to_not eq(merchant_5.id)
     expect(merchant[:id].to_i).to_not eq(merchant_6.id)
     expect(merchant[:attributes][:name].downcase).to include(value_2.downcase)
+  end
+
+  scenario "searches for partial matches that are case insensitive" do
+    attribute = "name"
+    value = "ill"
+    merchant_1 = create(:merchant, name: "Schiller")
+    merchant_2 = create(:merchant, name: "Tillman Group")
+    merchant_3 = create(:merchant, name: "Williamson Group")
+
+    get "/api/v1/merchants/find?#{attribute}=#{value}"
+    expect(response).to be_successful
+
+    merchant = JSON.parse(response.body, symbolize_names: true)[:data]
+    expect(merchant[:id].to_i).to eq(merchant_1.id)
+    expect(merchant[:id].to_i).to_not eq(merchant_2.id)
+    expect(merchant[:id].to_i).to_not eq(merchant_3.id)
+    expect(merchant[:attributes][:name].downcase).to include(value_1.downcase)
   end
 
   scenario "searches using created_at" do
