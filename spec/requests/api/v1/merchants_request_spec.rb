@@ -63,9 +63,9 @@ describe "Merchants API" do
     }
 
     post "/api/v1/merchants", params: merchant_params
-    created_merchant = Merchant.last
-
     expect(response).to be_successful
+
+    created_merchant = Merchant.last
     expect(created_merchant.name).to eq(merchant_params[:name])
   end
 
@@ -78,5 +78,18 @@ describe "Merchants API" do
     expect(response.status).to eq(204)
     expect(response.body).to be_empty
     expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it "can update an existing merchant" do
+    id = create(:merchant).id
+    previous_name = Merchant.last.name
+    merchant_params = { name: "NEW MERCHANT NAME" }
+
+    patch "/api/v1/merchants/#{id}", params: merchant_params
+    expect(response).to be_successful
+
+    merchant = Merchant.find_by(id: id)
+    expect(merchant.name).to_not eq(previous_name)
+    expect(merchant.name).to eq(merchant_params[:name])
   end
 end

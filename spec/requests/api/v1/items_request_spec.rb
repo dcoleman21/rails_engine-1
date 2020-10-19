@@ -95,4 +95,29 @@ describe "Items API" do
     expect(response.body).to be_empty
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
+
+  it "can update an existing item" do
+    id = create(:item).id
+    previous_name = Item.last.name
+    previous_description = Item.last.description
+    previous_unit_price = Item.last.unit_price
+    item_params = {
+      name: "NEW ITEM NAME",
+      description: "This is a chunk of information that is supposed to be 256 characters or longer since that is the limit of a String data type in Active Record and this particular record allows for a Text data type which allows for up to 30,000 characters saved. This allows our CSV doc to send and save longer descriptions.",
+      unit_price: 1245.98,
+    }
+
+    patch "/api/v1/items/#{id}", params: item_params
+    expect(response).to be_successful
+
+    item = Item.find_by(id: id)
+    expect(item.name).to_not eq(previous_name)
+    expect(item.name).to eq(item_params[:name])
+
+    expect(item.description).to_not eq(previous_description)
+    expect(item.description).to eq(item_params[:description])
+
+    expect(item.unit_price).to_not eq(previous_unit_price)
+    expect(item.unit_price).to eq(item_params[:unit_price])
+  end
 end
