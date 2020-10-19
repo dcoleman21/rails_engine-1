@@ -1,12 +1,20 @@
 class Api::V1::Merchants::SearchController < ApplicationController
   def show
-    binding.pry
-    params will come through as the attribute
-    These will be our query params
-    name
-    created_at
-    updated_at
-    Merchant model should hold the logic for searching through all the Merchants and finding by attribute matching
-    render json: MerchantSerializer.new(Merchant.single_finder(query_params))
+    render json: MerchantSerializer.new(Merchant.single_finder(attribute, query))
+  end
+
+
+  private
+
+  def query_params
+    params.permit(:name, :created_at, :updated_at)
+  end
+
+  def attribute
+    query_params.keys.first
+  end
+
+  def query
+    query_params[attribute]
   end
 end
