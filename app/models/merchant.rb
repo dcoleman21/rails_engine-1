@@ -3,4 +3,12 @@ class Merchant < ApplicationRecord
 
   has_many :items
   has_many :invoices
+
+  def self.single_finder(attribute, query)
+    if attribute == "created_at" || attribute == "updated_at"
+      Merchant.where("to_char(#{attribute},'yyyy-mon-dd-HH-MI-SS') ILIKE ?", "%#{query}%").first
+    else
+      Merchant.where("#{attribute} ILIKE ?", "%#{query}%").first
+    end
+  end
 end
