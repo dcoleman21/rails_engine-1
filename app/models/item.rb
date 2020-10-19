@@ -13,7 +13,7 @@ class Item < ApplicationRecord
     elsif attribute == "unit_price"
       Item.where("to_char(#{attribute}, '999999999.99') ILIKE ?", "%#{query}%").first
     else
-      Item.where("LOWER(#{attribute}) LIKE ?", "%#{query.downcase}%").first
+      Item.where("#{attribute} ILIKE ?", "%#{query}%").first
     end
   end
 end

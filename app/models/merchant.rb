@@ -8,7 +8,7 @@ class Merchant < ApplicationRecord
     if attribute == "created_at" || attribute == "updated_at"
       Merchant.where("to_char(#{attribute},'yyyy-mon-dd-HH-MI-SS') ILIKE ?", "%#{query}%").first
     else
-      Merchant.where("LOWER(#{attribute}) LIKE ?", "%#{query.downcase}%").first
+      Merchant.where("#{attribute} ILIKE ?", "%#{query}%").first
     end
   end
 end
