@@ -43,7 +43,7 @@ describe "it can search by keywords for a single item:" do
     returned_item = JSON.parse(response.body, symbolize_names: true)[:data]
     expect(returned_item[:id].to_i).to eq(item_1.id)
     expect(returned_item[:id].to_i).to_not eq(item_2.id)
-    expect(returned_item[:attributes][:unit_price]).to include(value)
+    expect(returned_item[:attributes][:unit_price].to_s).to include(value.to_s)
   end
 
   scenario "searches for partial matches that are case insensitive" do
