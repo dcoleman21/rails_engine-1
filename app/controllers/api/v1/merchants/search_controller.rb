@@ -3,6 +3,10 @@ class Api::V1::Merchants::SearchController < ApplicationController
     render json: MerchantSerializer.new(Merchant.single_finder(attribute, query))
   end
 
+  def index
+    render json: MerchantSerializer.new(Merchant.multi_finder(attribute, query))
+  end
+
   private
 
   def query_params
