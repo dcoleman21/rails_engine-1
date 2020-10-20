@@ -9,7 +9,8 @@ class Api::V1::Merchants::StatisticsController < ApplicationController
     render json: MerchantSerializer.new(Merchant.most_items(quantity))
   end
 
-  def revenue
-
+  def show
+    merchant = Merchant.find(params[:merchant_id])
+    render json: RevenueSerializer.new(merchant.revenue)
   end
 end
