@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "Items API" do
-  it "sends a list of items" do
+  scenario "sends a list of items" do
     create_list(:item, 5)
 
     get '/api/v1/items'
@@ -39,7 +39,7 @@ describe "Items API" do
     end
   end
 
-  it "can get one item by its id" do
+  scenario "can get one item by its id" do
     id = create(:item).id
 
     get "/api/v1/items/#{id}"
@@ -64,7 +64,7 @@ describe "Items API" do
     expect(item[:attributes][:updated_at]).to be_a(String)
   end
 
-  it "can create a new item" do
+  scenario "can create a new item" do
     merchant = create(:merchant)
     item_params = {
       name: "name",
@@ -85,7 +85,7 @@ describe "Items API" do
     expect(created_item.merchant_id).to eq(merchant.id)
   end
 
-  it "can destroy a item" do
+  scenario "can destroy a item" do
     item = create(:item)
 
     expect{ delete "/api/v1/items/#{item.id}" }.to change(Item, :count).by(-1)
@@ -96,7 +96,7 @@ describe "Items API" do
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  it "can update an existing item" do
+  scenario "can update an existing item" do
     id = create(:item).id
     previous_name = Item.last.name
     previous_description = Item.last.description
