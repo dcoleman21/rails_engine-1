@@ -55,7 +55,7 @@ describe "it can search by keywords for a multiple items:" do
     items.each do |item|
       expect(item[:id].to_i).to eq(item_1.id).or(eq item_2.id)
       expect(item[:id].to_i).to_not eq(item_3.id)
-      expect(returned_item[:attributes][:unit_price].to_s).to include(value.to_s)
+      expect(item[:attributes][:unit_price].to_s).to include(value.to_s)
     end
   end
 
