@@ -9,16 +9,21 @@ Rails.application.routes.draw do
         get '/most_items', to: 'statistics#items'
         get '/:merchant_id/revenue', to: 'statistics#show'
       end
+
       namespace :items do
         get '/:item_id/merchants', to: 'merchant#show'
         get 'find', to: 'search#show'
         get 'find_all', to: 'search#index'
       end
+
       namespace :invoices do
         get '/most_expensive', to: 'statistics#index'
       end
+
       resources :merchants
+
       resources :items
+
       get 'revenue', to: 'revenue#index'
     end
   end

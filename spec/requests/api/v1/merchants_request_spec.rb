@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "Merchants API" do
-  it "sends a list of merchants" do
+  scenario "sends a list of merchants" do
     create_list(:merchant, 3)
 
     get '/api/v1/merchants'
@@ -30,7 +30,7 @@ describe "Merchants API" do
     end
   end
 
-  it "can get one merchant by its id" do
+  scenario "can get one merchant by its id" do
     id = create(:merchant).id
 
     get "/api/v1/merchants/#{id}"
@@ -55,7 +55,7 @@ describe "Merchants API" do
     expect(merchant[:attributes][:updated_at]).to be_a(String)
   end
 
-  it "can create a new merchant" do
+  scenario "can create a new merchant" do
     merchant_params = {
       name: "name",
       created_at: "create",
@@ -69,7 +69,7 @@ describe "Merchants API" do
     expect(created_merchant.name).to eq(merchant_params[:name])
   end
 
-  it "can destroy a merchant" do
+  scenario "can destroy a merchant" do
     merchant = create(:merchant)
 
     expect{ delete "/api/v1/merchants/#{merchant.id}" }.to change(Merchant, :count).by(-1)
@@ -80,7 +80,7 @@ describe "Merchants API" do
     expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  it "can update an existing merchant" do
+  scenario "can update an existing merchant" do
     id = create(:merchant).id
     previous_name = Merchant.last.name
     merchant_params = { name: "NEW MERCHANT NAME" }
