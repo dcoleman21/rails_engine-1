@@ -8,7 +8,7 @@ describe "Relationships - return the merchant associated with an item" do
     merchant_2 = create(:merchant)
     item_3 = create(:item, merchant_id: "#{merchant_2.id}")
 
-    get "/api/v1/items/#{item_1.id}/merchant"
+    get "/api/v1/items/#{item_1.id}/merchants"
     expect(response).to be_successful
     merchant = JSON.parse(response.body, symbolize_names: true)[:data]
 
@@ -31,13 +31,13 @@ describe "Relationships - return the merchant associated with an item" do
     expect(merchant[:attributes]).to have_key(:updated_at)
     expect(merchant[:attributes][:updated_at]).to be_a(String)
 
-    get "/api/v1/items/#{item_2.id}/merchant"
+    get "/api/v1/items/#{item_2.id}/merchants"
     expect(response).to be_successful
     merchant = JSON.parse(response.body, symbolize_names: true)[:data]
     expect(merchant[:id]).to eq("#{merchant_1.id}")
     expect(merchant[:id]).to_not eq("#{merchant_2.id}")
 
-    get "/api/v1/items/#{item_3.id}/merchant"
+    get "/api/v1/items/#{item_3.id}/merchants"
     expect(response).to be_successful
     merchant = JSON.parse(response.body, symbolize_names: true)[:data]
     expect(merchant[:id]).to eq("#{merchant_2.id}")
