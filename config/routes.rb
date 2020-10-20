@@ -11,6 +11,9 @@ Rails.application.routes.draw do
         get 'find', to: 'search#show'
         get 'find_all', to: 'search#index'
       end
+      namespace :invoices do
+        get '/most_expensive', to: 'statistics#index'
+      end
       resources :merchants
       resources :items
     end
