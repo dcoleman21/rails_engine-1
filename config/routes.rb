@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       end
       resources :merchants
       resources :items
+      get 'revenue', to: 'revenue#index'
     end
   end
 end
