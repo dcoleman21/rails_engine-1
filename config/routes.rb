@@ -9,7 +9,7 @@ Rails.application.routes.draw do
         get '/most_items', to: 'statistics#items'
       end
       namespace :items do
-        get '/:item_id/merchant', to: 'merchant#show'
+        get '/:item_id/merchants', to: 'merchant#show'
         get 'find', to: 'search#show'
         get 'find_all', to: 'search#index'
       end
@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       end
       resources :merchants
       resources :items
+      get 'revenue', to: 'revenue#index'
     end
   end
 end
