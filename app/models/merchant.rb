@@ -11,4 +11,12 @@ class Merchant < ApplicationRecord
       Merchant.where("#{attribute} ILIKE ?", "%#{query}%").first
     end
   end
+
+  def self.multi_finder(attribute, query)
+    if attribute == "created_at" || attribute == "updated_at"
+      Merchant.where("to_char(#{attribute},'yyyy-mon-dd-HH-MI-SS') ILIKE ?", "%#{query}%")
+    else
+      Merchant.where("#{attribute} ILIKE ?", "%#{query}%")
+    end
+  end
 end
