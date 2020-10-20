@@ -128,7 +128,7 @@ describe "Revenue Business Intelligence Endpoints:" do
 
     expect(response).to be_successful
     result = JSON.parse(response.body, symbolize_names: true)[:data]
-    expect(result[:id]).to eq(merchant_1.id)
+    expect(result[:id]).to be_nil
     expect(result[:attributes][:revenue]).to eq(merchant_1_rev)
     expect(result[:attributes][:revenue]).to_not eq(merchant_2_rev)
     expect(result[:attributes][:revenue]).to_not eq(merchant_3_rev)
