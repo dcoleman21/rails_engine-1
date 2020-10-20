@@ -63,7 +63,7 @@ describe "it can search by keywords for a single merchant:" do
   scenario "searches using updated_at" do
     attribute = "updated_at"
     search_merchant = create(:merchant)
-    value = "19"
+    value = "2020"
 
     get "/api/v1/merchants/find?#{attribute}=#{value}"
     expect(response).to be_successful

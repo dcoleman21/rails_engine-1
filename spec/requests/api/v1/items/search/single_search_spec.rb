@@ -75,7 +75,7 @@ describe "it can search by keywords for a single item:" do
   scenario "searches using updated_at" do
     attribute = "updated_at"
     search_item = create(:item)
-    value = "19"
+    value = "2020"
 
     get "/api/v1/items/find?#{attribute}=#{value}"
     expect(response).to be_successful
