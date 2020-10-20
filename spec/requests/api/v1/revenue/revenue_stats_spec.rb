@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "Revenue Business Intelligence Endpoints:" do
   scenario "returns the total revenue across all merchants between the given dates." do
-    # This is not an index or show action, it might be a total action
+    # Since it is a call of total revenue and we have no other calls, except indivual merchant revenue, I think I can label it as INDEX
     #
     # Active Record Dreaming
     #   To get to revenue - merchants to invoices to invoice_items(contains rev calc & where condition) and transactions(contains where condition)
@@ -77,13 +77,13 @@ describe "Revenue Business Intelligence Endpoints:" do
     expected_revenue = 300.00
 
     # Api and finish the test
-    start_date = '2020-03-09'
-    end_date = '2020-03-24'
+    start_date = Date.today
+    end_date = Date.today
     get "/api/v1/revenue?start=#{start_date}&end=#{end_date}"
 
     expect(response).to be_successful
     result = JSON.parse(response.body, symbolize_names: true)[:data]
-    expect(result[:id]).to be_null
+    expect(result[:id]).to be_nil
     expect(result[:attributes][:revenue]).to eq(expected_revenue)
   end
 
