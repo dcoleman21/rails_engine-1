@@ -9,21 +9,33 @@ class Item < ApplicationRecord
 
   def self.single_finder(attribute, query)
     if attribute == "created_at" || attribute == "updated_at"
-      Item.where("to_char(#{attribute},'yyyy-mon-dd-HH-MI-SS') ILIKE ?", "%#{query}%").first
+      date_helper(attribute, query).first
     elsif attribute == "unit_price"
-      Item.where("to_char(#{attribute}, '999999999.99') ILIKE ?", "%#{query}%").first
+      price_helper(attribute, query).first
     else
-      Item.where("#{attribute} ILIKE ?", "%#{query}%").first
+      search_helper(attribute, query).first
     end
   end
 
   def self.multi_finder(attribute, query)
     if attribute == "created_at" || attribute == "updated_at"
-      Item.where("to_char(#{attribute},'yyyy-mon-dd-HH-MI-SS') ILIKE ?", "%#{query}%")
+      date_helper(attribute, query)
     elsif attribute == "unit_price"
-      Item.where("to_char(#{attribute}, '999999999.99') ILIKE ?", "%#{query}%")
+      price_helper(attribute, query)
     else
-      Item.where("#{attribute} ILIKE ?", "%#{query}%")
+      search_helper(attribute, query)
     end
+  end
+
+  def self.date_helper(attribute, query)
+    where("to_char(#{attribute},'yyyy-mon-dd-HH-MI-SS') ILIKE ?", "%#{query}%")
+  end
+
+  def self.price_helper(attribute, query)
+    where("to_char(#{attribute}, '999999999.99') ILIKE ?", "%#{query}%")
+  end
+
+  def self.search_helper(attribute, query)
+    where("#{attribute} ILIKE ?", "%#{query}%")
   end
 end
