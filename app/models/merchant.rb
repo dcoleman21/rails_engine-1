@@ -55,4 +55,8 @@ class Merchant < ApplicationRecord
            .sum('unit_price * quantity')
     Revenue.new(merchant_revenue)
   end
+
+  def self.reset_primary_keys
+    ActiveRecord::Base.connection.reset_pk_sequence!('merchants')
+  end
 end

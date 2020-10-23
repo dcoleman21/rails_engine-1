@@ -38,4 +38,8 @@ class Item < ApplicationRecord
   def self.search_helper(attribute, query)
     where("#{attribute} ILIKE ?", "%#{query}%")
   end
+
+  def self.reset_primary_keys
+    ActiveRecord::Base.connection.reset_pk_sequence!('items')
+  end
 end
