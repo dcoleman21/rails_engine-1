@@ -4,22 +4,30 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def show
-    render json: MerchantSerializer.new(Merchant.find(params[:id]))
+    return !Merchant.exists?(params[:id]) ?
+      (render :status => 404) :
+      (render json: MerchantSerializer.new(Merchant.find(params[:id])))
   end
 
   def create
-    ActiveRecord::Base.connection.reset_pk_sequence!('merchants')
+    Merchant.reset_primary_keys
     new_merchant = Merchant.new(merchant_params)
-    render json: MerchantSerializer.new(new_merchant) if new_merchant.save
+    return new_merchant.save ?
+      (render json: MerchantSerializer.new(new_merchant)) :
+      (render :status => 404)
   end
 
   def destroy
-    Merchant.destroy(params[:id])
-    head :no_content
+    if Merchant.exists?(params[:id])
+      Merchant.destroy(params[:id])
+      head :no_content
+    else
+      render :status => 404
+    end
   end
 
   def update
-    render json: MerchantSerializer.new(Merchant.update(params[:id], merchant_params))
+    render json: MerchantSerializer.new(Merchant.update(params[:id], merchant_params.reject{|k,v| v.blank?}))
   end
 
   private

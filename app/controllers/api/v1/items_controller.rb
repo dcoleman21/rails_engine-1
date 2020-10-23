@@ -4,22 +4,30 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def show
-    render json: ItemSerializer.new(Item.find(params[:id]))
+    return !Item.exists?(params[:id]) ?
+      (render :status => 404) :
+      (render json: ItemSerializer.new(Item.find(params[:id])))
   end
 
   def create
-    ActiveRecord::Base.connection.reset_pk_sequence!('items')
+    Item.reset_primary_keys
     new_item = Item.new(item_params)
-    render json: ItemSerializer.new(new_item) if new_item.save
+    return new_item.save ?
+      (render json: ItemSerializer.new(new_item)) :
+      (render :status => 404)
   end
 
   def destroy
-    Item.destroy(params[:id])
-    head :no_content
+    if Item.exists?(params[:id])
+      Item.destroy(params[:id])
+      head :no_content
+    else
+      render :status => 404
+    end
   end
 
   def update
-    render json: ItemSerializer.new(Item.update(params[:id], item_params))
+    render json: ItemSerializer.new(Item.update(params[:id], item_params.reject{|k,v| v.blank?}))
   end
 
   private

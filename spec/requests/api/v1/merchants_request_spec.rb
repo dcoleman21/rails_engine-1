@@ -55,6 +55,12 @@ describe "Merchants API" do
     expect(merchant[:attributes][:updated_at]).to be_a(String)
   end
 
+  scenario "can get an error if id doesn't exist on show" do
+    get "/api/v1/merchants/1"
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+  end
+
   scenario "can create a new merchant" do
     merchant_params = {
       name: "name",
@@ -69,6 +75,15 @@ describe "Merchants API" do
     expect(created_merchant.name).to eq(merchant_params[:name])
   end
 
+  scenario "can get an error if name is empty on create" do
+    merchant_params = {
+    }
+
+    post "/api/v1/merchants", params: merchant_params
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+  end
+
   scenario "can destroy a merchant" do
     merchant = create(:merchant)
 
@@ -78,6 +93,12 @@ describe "Merchants API" do
     expect(response.status).to eq(204)
     expect(response.body).to be_empty
     expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  scenario "can get an error if id doesn't exist on destroy" do
+    delete "/api/v1/merchants/1"
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
   end
 
   scenario "can update an existing merchant" do
@@ -91,5 +112,19 @@ describe "Merchants API" do
     merchant = Merchant.find_by(id: id)
     expect(merchant.name).to_not eq(previous_name)
     expect(merchant.name).to eq(merchant_params[:name])
+  end
+
+  scenario "can get an error if name is empty on update" do
+    id = create(:merchant).id
+    previous_name = Merchant.last.name
+
+    merchant_params = { name: ""
+    }
+
+    patch "/api/v1/merchants/#{id}", params: merchant_params
+    expect(response).to be_successful
+    merchant = Merchant.find_by(id: id)
+    expect(merchant.name).to eq(previous_name)
+    expect(merchant.name).to_not eq("")
   end
 end

@@ -1,7 +1,7 @@
 class Item < ApplicationRecord
-  validates :name, presence: true
-  validates :description, presence: true
-  validates :unit_price, presence: true
+  validates :name, presence: true, allow_nil: false
+  validates :description, presence: true, allow_nil: false
+  validates :unit_price, presence: true, allow_nil: false
 
   belongs_to :merchant
   has_many :invoice_items
@@ -37,5 +37,9 @@ class Item < ApplicationRecord
 
   def self.search_helper(attribute, query)
     where("#{attribute} ILIKE ?", "%#{query}%")
+  end
+
+  def self.reset_primary_keys
+    ActiveRecord::Base.connection.reset_pk_sequence!('items')
   end
 end

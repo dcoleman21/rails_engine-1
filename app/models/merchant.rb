@@ -1,5 +1,5 @@
 class Merchant < ApplicationRecord
-  validates :name, presence: true
+  validates :name, presence: true, allow_nil: false
 
   has_many :items
   has_many :invoices
@@ -54,5 +54,9 @@ class Merchant < ApplicationRecord
            .where(merchant_id: self.id)
            .sum('unit_price * quantity')
     Revenue.new(merchant_revenue)
+  end
+
+  def self.reset_primary_keys
+    ActiveRecord::Base.connection.reset_pk_sequence!('merchants')
   end
 end
