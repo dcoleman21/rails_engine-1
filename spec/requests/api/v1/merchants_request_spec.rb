@@ -75,6 +75,15 @@ describe "Merchants API" do
     expect(created_merchant.name).to eq(merchant_params[:name])
   end
 
+  scenario "can get an error if name is empty" do
+    merchant_params = {
+    }
+
+    post "/api/v1/merchants", params: merchant_params
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+  end
+
   scenario "can destroy a merchant" do
     merchant = create(:merchant)
 

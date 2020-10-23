@@ -12,7 +12,9 @@ class Api::V1::MerchantsController < ApplicationController
   def create
     Merchant.reset_primary_keys
     new_merchant = Merchant.new(merchant_params)
-    render json: MerchantSerializer.new(new_merchant) if new_merchant.save
+    return new_merchant.save ?
+      (render json: MerchantSerializer.new(new_merchant)) :
+      (render :status => 404)
   end
 
   def destroy
