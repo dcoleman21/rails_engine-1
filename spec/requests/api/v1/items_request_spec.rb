@@ -91,6 +91,19 @@ describe "Items API" do
     expect(created_item.merchant_id).to eq(merchant.id)
   end
 
+  scenario "can get an error if fields are empty" do
+    merchant = create(:merchant)
+    item_params = {
+      description: "This is a chunk of information that is supposed to be 256 characters or longer since that is the limit of a String data type in Active Record and this particular record allows for a Text data type which allows for up to 30,000 characters saved. This allows our CSV doc to send and save longer descriptions.",
+      unit_price: 300.98,
+      merchant_id: merchant.id,
+    }
+
+    post "/api/v1/items", params: item_params
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+  end
+
   scenario "can destroy a item" do
     item = create(:item)
 

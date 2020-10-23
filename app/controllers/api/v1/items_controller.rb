@@ -12,7 +12,9 @@ class Api::V1::ItemsController < ApplicationController
   def create
     Item.reset_primary_keys
     new_item = Item.new(item_params)
-    render json: ItemSerializer.new(new_item) if new_item.save
+    return new_item.save ?
+      (render json: ItemSerializer.new(new_item)) :
+      (render :status => 404)
   end
 
   def destroy
