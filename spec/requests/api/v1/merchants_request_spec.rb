@@ -113,4 +113,18 @@ describe "Merchants API" do
     expect(merchant.name).to_not eq(previous_name)
     expect(merchant.name).to eq(merchant_params[:name])
   end
+
+  scenario "can get an error if name is empty on update" do
+    id = create(:merchant).id
+    previous_name = Merchant.last.name
+
+    merchant_params = { name: ""
+    }
+
+    patch "/api/v1/merchants/#{id}", params: merchant_params
+    expect(response).to be_successful
+    merchant = Merchant.find_by(id: id)
+    expect(merchant.name).to eq(previous_name)
+    expect(merchant.name).to_not eq("")
+  end
 end
