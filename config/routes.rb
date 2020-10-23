@@ -20,9 +20,13 @@ Rails.application.routes.draw do
         get '/most_expensive', to: 'statistics#index'
       end
 
+      namespace :customers do
+        get '/best_repeaters', to: 'statistics#index'
+      end
+
       resources :merchants
       resources :items
-      get 'revenue', to: 'revenue#index'
+      resources :revenue, only: :index
     end
   end
 end
