@@ -18,8 +18,12 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    Item.destroy(params[:id])
-    head :no_content
+    if Item.exists?(params[:id])
+      Item.destroy(params[:id])
+      head :no_content
+    else
+      render :status => 404
+    end
   end
 
   def update

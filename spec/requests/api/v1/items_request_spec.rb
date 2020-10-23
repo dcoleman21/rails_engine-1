@@ -115,6 +115,12 @@ describe "Items API" do
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
 
+  scenario "can get an error if id doesn't exist on destroy" do
+    delete "/api/v1/items/1"
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+  end
+
   scenario "can update an existing item" do
     id = create(:item).id
     previous_name = Item.last.name
