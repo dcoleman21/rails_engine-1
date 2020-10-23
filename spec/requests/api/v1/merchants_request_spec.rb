@@ -55,6 +55,12 @@ describe "Merchants API" do
     expect(merchant[:attributes][:updated_at]).to be_a(String)
   end
 
+  scenario "can get an error if id doesn't exist" do
+    get "/api/v1/merchants/1"
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+  end
+
   scenario "can create a new merchant" do
     merchant_params = {
       name: "name",
