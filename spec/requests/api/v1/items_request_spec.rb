@@ -64,6 +64,12 @@ describe "Items API" do
     expect(item[:attributes][:updated_at]).to be_a(String)
   end
 
+  scenario "can get an error if id doesn't exist" do
+    get "/api/v1/items/1"
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+  end
+
   scenario "can create a new item" do
     merchant = create(:merchant)
     item_params = {
