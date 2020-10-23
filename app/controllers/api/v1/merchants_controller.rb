@@ -4,11 +4,9 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def show
-    if !Merchant.exists?(params[:id])
-      render :status => 404
-    else
-      render json: MerchantSerializer.new(Merchant.find(params[:id]))
-    end
+    return !Merchant.exists?(params[:id]) ?
+      (render :status => 404) :
+      (render json: MerchantSerializer.new(Merchant.find(params[:id])))
   end
 
   def create
