@@ -18,8 +18,12 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def destroy
-    Merchant.destroy(params[:id])
-    head :no_content
+    if Merchant.exists?(params[:id])
+      Merchant.destroy(params[:id])
+      head :no_content
+    else
+      render :status => 404
+    end
   end
 
   def update

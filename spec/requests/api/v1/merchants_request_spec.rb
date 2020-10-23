@@ -55,7 +55,7 @@ describe "Merchants API" do
     expect(merchant[:attributes][:updated_at]).to be_a(String)
   end
 
-  scenario "can get an error if id doesn't exist" do
+  scenario "can get an error if id doesn't exist on show" do
     get "/api/v1/merchants/1"
     expect(response).to_not be_successful
     expect(response.status).to eq(404)
@@ -75,7 +75,7 @@ describe "Merchants API" do
     expect(created_merchant.name).to eq(merchant_params[:name])
   end
 
-  scenario "can get an error if name is empty" do
+  scenario "can get an error if name is empty on create" do
     merchant_params = {
     }
 
@@ -93,6 +93,12 @@ describe "Merchants API" do
     expect(response.status).to eq(204)
     expect(response.body).to be_empty
     expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  scenario "can get an error if id doesn't exist on destroy" do
+    delete "/api/v1/merchants/1"
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
   end
 
   scenario "can update an existing merchant" do
